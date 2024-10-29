@@ -25,12 +25,6 @@ const userSchema = new Schema(
             trim: true, 
             index: true
         },
-        watchHistory: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Video"
-            }
-        ],
         password: {
             type: String,
             required: [true, 'Password is required']
