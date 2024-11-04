@@ -18,6 +18,10 @@ app.use(cookieParser())
 //importing routes
 import userRouter from './routes/user.routes.js'
 
+app.get('/',(req,res)=>{
+    res.send("Server is live")
+})
+
 //router declaration
 app.use("/api/v1/users",userRouter)
 
