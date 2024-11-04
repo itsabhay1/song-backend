@@ -27,7 +27,10 @@ const registerUser = asyncHandler(async (req,res) => {
     //taking user details from frontend
     const {fullName, email, username, password } = req.body
     
-    
+    if(!fullName||!email||!username||password){
+        return res.status(403).json({msg:"All fields are required"})
+    }
+
     //checking empty field
     if (
         [fullName, email, username, password].some((field) => field?.trim() === "")
@@ -63,7 +66,7 @@ const registerUser = asyncHandler(async (req,res) => {
 
     //returning response
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User Registered Successfully")
+        new ApiResponse(201, createdUser, "User Registered Successfully")
     )
 });
 
