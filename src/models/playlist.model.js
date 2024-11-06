@@ -12,13 +12,13 @@ const playlistSchema = new Schema(
         },
         songs: [
             {
-                type: String,
-                required: true
+                type: mongoose.Types.ObjectId,
+                ref: "song"
             }
         ],
         owner: {
             name: mongoose.Types.ObjectId,
-            ref: "User"
+            ref: "user"
         }
 
     }
