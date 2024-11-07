@@ -5,13 +5,13 @@ import { User } from "../models/user.model.js";
 
 
 const songByName = asyncHandler(async (req, res) => {
-    const {songName} = req.body 
+    const {songName} = req.params; 
     const songs = await  Song.find({name: songName})
     return res.status(200).json({data: songs})
 })
 
 const songByArtist = asyncHandler(async (req, res) => {
-    const { artistId } = req.body;
+    const { artistId } = req.params;
     const artist = await User.findById(artistId); // Use findById for a single document
 
     if (!artist) {
