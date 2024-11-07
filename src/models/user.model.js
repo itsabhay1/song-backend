@@ -1,5 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import jwt from "jsonwebtoken"
+import "dotenv/config"
 import bcrypt from "bcrypt"
 
 const userSchema = new Schema(
@@ -29,6 +30,9 @@ const userSchema = new Schema(
             type: String,
             required: [true, 'Password is required']
         },
+        image: {
+            type: String, 
+        }, 
         refreshToken: {
             type: String
         }

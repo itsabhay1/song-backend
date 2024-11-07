@@ -3,6 +3,8 @@ import {ApiError} from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import fs from "fs";
 
 
 
@@ -23,7 +25,9 @@ const generateAcessAndRefreshTokens = async(userId) =>
     }
 }
 const registerUser = asyncHandler(async (req,res) => {
-   
+
+    const imageFile = req.files["image"] ? req.files["image"][0] : null;
+
     //taking user details from frontend
     const {fullName, email, username, password } = req.body
     
@@ -38,6 +42,17 @@ const registerUser = asyncHandler(async (req,res) => {
         throw new ApiError(400, "All fields are required")
     }
 
+    //uploading image to cloudinary
+    let uploadResponse;
+    if (imageFile) {
+      try {
+        uploadResponse = await uploadOnCloudinary(imageFile.path);
+        fs.unlinkSync(imageFile.path);
+      } catch (error) {
+        return res.status(500).json({ message: "Image upload to Cloudinary failed." });
+      }
+    }
+
     //checking if user is  already registered
     const existedUser = await User.findOne({
         $or: [{username}, {email}]
@@ -49,6 +64,7 @@ const registerUser = asyncHandler(async (req,res) => {
     //creating user object
     const user = await User.create({
         fullName,
+        image: uploadResponse?.url || "",
         email,
         password,
         username
