@@ -1,6 +1,8 @@
 import { Playlist } from "../models/playlist.model.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js";
+import { User } from "../models/user.model.js";
+import { Song } from "../models/song.model.js";
 
 
 //creating playlist
@@ -23,7 +25,7 @@ const userPlaylist = asyncHandler(async (req, res) => {
 })
 
 //getting playlist by Id
-const getplaylist = asyncHandler(async (req, res) => {
+const getplaylistId = asyncHandler(async (req, res) => {
     const playlistId = req.params.playlistId
     const playlist = await Playlist.findOne({_id: playlistId})
     if(!playlist) {
@@ -32,7 +34,46 @@ const getplaylist = asyncHandler(async (req, res) => {
     return res.status(200).json(playlist)
 })
 
+//getting playlist by artist
+const getPlaylistArtist = asyncHandler(async (req, res) => {
+    const artistId = req.params.artistId
+    const artist = await User.findOne({_id: artistId})
+    if(!artist) {
+        throw new ApiError(301, "Invalid Artist Id")
+    }
+    const playlist = await Playlist.find({owner: artistId})
+    return res.status(200).json({data: playlist})
+})
+
+//adding song to a playlist
+const addSong = asyncHandler(async (req, res) => {
+    const currentUser = req.user
+    const {playlistId, songId} = req.body
+    const playlist = await Playlist.findOne({_id: playlistId})
+    if(!playlist) {
+        throw new ApiError(304, "Playlist not exists")
+    }
+    //checking user owns or collaborator of playiist
+    if (
+        playlist.owner != currentUser._id ||
+        !playlist.collaborators.includes(currentUser._id)
+    ) { 
+        throw new ApiError(400, "Not Authorised")
+    }
+    // checking song is valid or not
+    const song = await Song.findOne({_id: songId})
+    if(!song) {
+        throw new ApiError(304, "Song does not exists")
+    }
+    //pushing song to playlist
+    playlist.songs.push(songId)
+    await playlist.save()
+    return res.status(200).json(playlist)
+})
+
 export{
     userPlaylist,
-    getplaylist
+    getplaylistId,
+    getPlaylistArtist,
+    addSong
 }
