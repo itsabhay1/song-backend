@@ -18,6 +18,8 @@ app.use(cookieParser())
 //importing routes
 import userRouter from './routes/user.routes.js'
 import songRouter from './routes/song.routes.js'
+import playlistRouter from './routes/playlist.routes.js'
+
 
 app.get('/',(req,res)=>{
     res.send("Server is live")
@@ -26,6 +28,7 @@ app.get('/',(req,res)=>{
 //router declaration
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/search",songRouter)
+app.use("/api/v1/playlist",playlistRouter)
 
 
 

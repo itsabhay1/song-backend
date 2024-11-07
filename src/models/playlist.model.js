@@ -17,9 +17,16 @@ const playlistSchema = new Schema(
             }
         ],
         owner: {
-            name: mongoose.Types.ObjectId,
-            ref: "user"
-        }
+            type: mongoose.Types.ObjectId,
+            ref: "User ",
+            required: true
+        },
+        collaborators: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: "User"
+            }
+        ]
 
     }
 )
