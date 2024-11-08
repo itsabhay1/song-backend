@@ -83,7 +83,7 @@ const getResultMl = async (req,res,next) => {
         }
     )
 
-    const res = await fetch.data;
+    res = await fetch.data;
     console.log(res);
 
     return {
