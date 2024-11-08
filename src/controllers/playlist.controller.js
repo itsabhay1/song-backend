@@ -3,6 +3,7 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import { Song } from "../models/song.model.js";
+import axios from "axios";
 
 
 //creating playlist
@@ -71,9 +72,32 @@ const addSong = asyncHandler(async (req, res) => {
     return res.status(200).json(playlist)
 })
 
+const getResultMl = async (req,res,next) => {
+    const {user_input,search_type} = req.body;
+    const fetch = await axios.post("https://7f93-34-75-224-22.ngrok-free.app/predict",
+        {
+            body : {
+                user_input,
+                search_type
+            }
+        }
+    )
+
+    const res = await fetch.data;
+    console.log(res);
+
+    return {
+        status:200,
+        msg : "successful",
+        data : res
+    };
+
+}
+
 export{
     userPlaylist,
     getplaylistId,
     getPlaylistArtist,
-    addSong
+    addSong,
+    getResultMl
 }
