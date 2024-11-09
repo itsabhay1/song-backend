@@ -217,6 +217,7 @@ const googleAuth = asyncHandler(async (req, res, next) => {
 const googleAuthCallback = asyncHandler(async (req, res) => {
     try {
         if (!req.user) {
+            console.log("User  in googleAuthCallback:", req.user);
             throw new ApiError(401, "Authentication failed"); // Handle case where user is not found
           }
         // Successful authentication, generate tokens and return response
