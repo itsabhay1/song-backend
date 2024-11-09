@@ -44,6 +44,7 @@ passport.use(new GoogleStrategy({
       const { accessToken, refreshToken } = await generateTokens(user);
       return cb(null, { user, accessToken, refreshToken });
     } catch (error) {
+      console.error("Error during authentication:", error);
       return cb(error);
     }
   }
