@@ -31,16 +31,16 @@ const registerUser = asyncHandler(async (req, res) => {
     //taking user details from frontend
     const { fullName, email, username, password } = req.body
 
-    if (!fullName || !email || !username || password) {
+    if (!(fullName || email || username || password)) {
         return res.status(403).json({ msg: "All fields are required" })
     }
 
     //checking empty field
-    if (
-        [fullName, email, username, password].some((field) => field?.trim() === "")
-    ) {
-        throw new ApiError(400, "All fields are required")
-    }
+    // if (
+    //     [fullName, email, username, password].some((field) => field?.trim() === "")
+    // ) {
+    //     throw new ApiError(400, "All fields are required")
+    // }
 
     //uploading image to cloudinary
     let uploadResponse;
